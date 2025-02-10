@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard de Métricas Atar Digital</title>
+
+  <style>
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      50% {
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .animated-bg {
+      height: 100%;
+      width: 100%;
+    }
+
+    .bg-container {
+      height: 100vh;
+      left: 0;
+      position: fixed;
+      top: 0;
+      transition: transform 1s ease;
+      width: 100vw;
+    }
+
+    .bg-container.ativo {
+      transform: translateY(-100%);
+    }
+
+    .bg-control {
+      align-items: center;
+      background-color: #43ab6d;
+      border-radius: 0 0 4px 4px;
+      bottom: 0;
+      content: "";
+      cursor: pointer;
+      display: flex;
+      height: 40px;
+      justify-content: center;
+      left: 50%;
+      opacity: .3;
+      position: absolute;
+      transform: translate(-50%, 100%);
+      width: 60px;
+      z-index: 100;
+    }
+
+    .bg-control img {
+      height: 20px;
+      width: 30px;
+    }
+
+    .dash {
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .logo {
+      filter: drop-shadow(0 0 10px #0f0);
+      left: 50%;
+      position: absolute;
+      top: 45%;
+      transform: translate(-50%, -50%);
+      width: 15vw;
+      z-index: 100;
+      animation: pulse 2s infinite ease-in-out;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-container">
+    <canvas class="animated-bg" id="canvas"></canvas>
+    <div class="bg-control"><img src="./arrow.svg" alt=""></div>
+    <img class="logo" src="./atar-logo.svg" alt="Atar Inteligência Digital">
+  </div>
+
+  <iframe class="dash" src="https://lookerstudio.google.com/embed/reporting/0e18cbce-3176-43f7-b8c0-592bad4b04b8/page/BbymE" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+
+  <script>
+    const animatedBg = document.querySelector(".bg-container");
+
+    window.addEventListener("click", () => {
+      animatedBg.classList.toggle("ativo");
+    });
+
+    function matrixEffect() {
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+
+      const w = canvas.width = document.body.offsetWidth;
+      const h = canvas.height = document.body.offsetHeight;
+      const cols = Math.floor(w / 20) + 1;
+      const ypos = Array(cols).fill(0);
+
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, w, h);
+
+      function matrix() {
+        ctx.fillStyle = '#0001';
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.fillStyle = '#0f0';
+        ctx.font = '15pt monospace';
+
+        ypos.forEach((y, ind) => {
+          const text = Math.random() > 0.5 ? '0' : '1';
+
+          const x = ind * 20;
+          ctx.fillText(text, x, y);
+          if (y > 100 + Math.random() * 10000) ypos[ind] = 0;
+          else ypos[ind] = y + 20;
+        });
+      }
+
+      setInterval(matrix, 50);
+    }
+
+    matrixEffect();
+  </script>
+</body>
+
+</html>
